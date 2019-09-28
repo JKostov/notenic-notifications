@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TestGateway } from './gateways/test.gateway';
+import { CollaborationGateway } from './gateways/collaboration.gateway';
+import { SharedModule } from '@app/shared/shared.module';
 
 @Module({
-  providers: [TestGateway]
+  imports: [
+    SharedModule,
+  ],
+  providers: [CollaborationGateway],
 })
 export class NotificationsModule {}

@@ -7,20 +7,21 @@ export class LoggedGuard implements CanActivate {
   constructor(private readonly tokenService: JwtTokenService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const token = request.headers.authorization;
-
+    const client = context.switchToWs().getClient();
+    const cookies: string[] = client.handshake.headers.cookie.split('; ');
+    const token = cookies.find(cookie => cookie.startsWith('AUTH_TOKEN')).split('=')[1];
+console.log(cookies);
     if (!token) {
       return false;
     }
 
     const tokenData: Token = await this.tokenService.verifyTokenAndGetData(token);
 
-    if (tokenData) {
-      request.user = tokenData;
-      return true;
+    if (!tokenData) {
+      return false;
     }
 
-    return false;
+    client.user = tokenData;
+    return true;
   }
 }
