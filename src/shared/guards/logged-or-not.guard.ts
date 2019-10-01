@@ -6,12 +6,11 @@ export class LoggedOrNotGuard implements CanActivate {
   constructor(private readonly tokenService: JwtTokenService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const client = context.switchToWs().getClient();
-    const cookies: string[] = client.handshake.headers.cookie.split('; ');
-    const token = cookies.find(cookie => cookie.startsWith('AUTH_TOKEN')).split('=')[1];
+    const request = context.switchToHttp().getRequest();
+    const token = request.headers.authorization;
 
     if (token) {
-      client.user = await this.tokenService.verifyTokenAndGetData(token);
+      request.user = await this.tokenService.verifyTokenAndGetData(token);
     }
 
     return true;

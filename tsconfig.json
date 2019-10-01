@@ -12,7 +12,7 @@
     "incremental": true,
     "paths": {
       "@app/*": ["./src/*"],
-      "@notifications/*": ["./src/notifications*"]
+      "@notifications/*": ["./src/notifications/*"]
     }
   },
   "exclude": ["node_modules"]
