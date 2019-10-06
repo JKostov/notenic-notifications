@@ -30,8 +30,8 @@ export class NotificationService {
   async findForUser(userId: string): Promise<Notification[]> {
     let limit = await this.notificationModel.count({ recipient: userId, seen: false }).exec();
 
-    if (limit < 10) {
-      limit = 3;
+    if (limit < 9) {
+      limit = 9;
     }
 
     return await this.notificationModel.find({ recipient: userId }, null, {

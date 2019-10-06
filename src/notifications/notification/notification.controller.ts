@@ -10,23 +10,11 @@ export class NotificationController {
 
   constructor(private readonly notificationService: NotificationService, private notificationGateway: NotificationGateway) { }
 
-  // @Get('test')
-  // public async test(@Req() req, @Res() res) {
-  //   const not = new CreateNotificationDto();
-  //   not.action = 'liked your note ';
-  //   not.userId = 'f1694d14-865b-4fd9-8b77-aa2acb410c16';
-  //   not.note = 'Test note';
-  //   const notifications = await this.notificationService.create(not);
-  //
-  //   return res.status(HttpStatus.OK).json(notifications);
-  // }
-
   @Get('user')
   @UseGuards(LoggedGuard)
   public async getNotificationForUser(@Req() req, @Res() res) {
     const user = req.user;
     const notifications = await this.notificationService.findForUser(user.id);
-    // this.notificationService.seenAll(user.id);
 
     return res.status(HttpStatus.OK).json(notifications);
   }
