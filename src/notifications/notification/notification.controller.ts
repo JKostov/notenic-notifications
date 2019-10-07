@@ -35,9 +35,11 @@ export class NotificationController {
     createNot.note = data.note;
     createNot.action = 'liked your note ';
     createNot.recipient = data.recipient;
-    const notification = await this.notificationService.create(createNot);
 
-    this.notificationGateway.server.to(notification.recipient).emit('new-notification', notification);
+    if (createNot.userId !== createNot.recipient) {
+      const notification = await this.notificationService.create(createNot);
+      this.notificationGateway.server.to(notification.recipient).emit('new-notification', notification);
+    }
   }
 
   @EventPattern('commented_note')
@@ -47,9 +49,11 @@ export class NotificationController {
     createNot.note = data.note;
     createNot.action = 'commented on your note ';
     createNot.recipient = data.recipient;
-    const notification = await this.notificationService.create(createNot);
 
-    this.notificationGateway.server.to(notification.recipient).emit('new-notification', notification);
+    if (createNot.userId !== createNot.recipient) {
+      const notification = await this.notificationService.create(createNot);
+      this.notificationGateway.server.to(notification.recipient).emit('new-notification', notification);
+    }
   }
 
   @EventPattern('published_note')
